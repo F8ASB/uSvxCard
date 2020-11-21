@@ -1,1 +1,13 @@
 callconfig.py
+
+Usage: callconfig.py [options ...]')
+   --help                           Cette aide
+   --version                        Numéro de version
+   
+    Parametrages:
+   
+    --dept       nombre      Entrer le numero de departement ex:88
+    --call       texte       Entrer votre indicatif ex:F1ABC
+    --band       nombre      Entrer la type acces (H,V,U,10M,R,T,T10M,S)
+    
+  73 de F8ASB Juan
