@@ -1,7 +1,9 @@
 ## callconfig.py
 
 Usage: callconfig.py [options ...]')
+
    --help                           Cette aide
+   
    --version                        Numéro de version
    
     Parametrages:
