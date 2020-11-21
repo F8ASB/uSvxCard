@@ -10,4 +10,3 @@ Usage: callconfig.py [options ...]')
     --call       texte       Entrer votre indicatif ex:F1ABC
     --band       nombre      Entrer la type acces (H,V,U,10M,R,T,T10M,S)
     
-  73 de F8ASB Juan
