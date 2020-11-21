@@ -1,4 +1,4 @@
-##callconfig.py
+## callconfig.py
 
 Usage: callconfig.py [options ...]')
    --help                           Cette aide
@@ -10,6 +10,6 @@ Usage: callconfig.py [options ...]')
     --call       texte       Entrer votre indicatif ex:F1ABC
     --band       nombre      Entrer la type acces (H,V,U,10M,R,T,T10M,S)
     
-##shutdown.py
+## shutdown.py
 
 Pour plus d'informations se rendre sur: <http://blog.f8asb.com/2020/04/17/eteindre-son-raspberry-avec-un-bouton-sur-gpio/>
