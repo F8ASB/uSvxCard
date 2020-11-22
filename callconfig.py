@@ -17,9 +17,9 @@ usage=""
 # lancement avec argument
     
 def main(argv):
-    dept = " "
-    call=" "
-    band=" "
+    global dept 
+    global call
+    global band
 
     try:
         options, remainder = getopt.getopt(argv, '', ['help', 'version', 'dept=', 'call=', 'band='])
@@ -62,9 +62,9 @@ def Input_control(dept,call,band):
         upcallsignRRF=("(" +dept+ ")" +call+" "+band)
 
 #Impression des calls
-#        print(call)
-#        print( call + "-EL")
-#        print("(" +dept+ ")" +call+" "+band)
+        print(call)
+        print( call + "-EL")
+        print("(" +dept+ ") " +call+" "+band)
 #MAJ dans les fichiers
         updatecall(upcallsignSVX,upcallsignEL,upcallsignRRF)
         updatecall_json()
@@ -129,28 +129,6 @@ def updatecall_json():
     with open(Json, 'w') as f:
         json.dump(config, f)    
 
-#Question pour parametrage
-#print('Entrer votre indicatif:')
-#call = input()
-#print('Entrez votre departement:')
-#dept = input()
-#print('Entrez votre bande: ( V,U,R,H')
-#band = input()
-
-
-#Impression des calls
-#print(call)
-#print( call + "-EL")
-#print("(" +dept+ ")" +call+" "+band)
-
-#Mise en forme des calls
-#upcallsignSVX=(call)
-#upcallsignEL=( call + "-EL")
-#upcallsignRRF=("(" +dept+ ")" +call+" "+band)
-
-#MAJ dans les fichiers
-#updatecall(upcallsignSVX,upcallsignEL,upcallsignRRF)
-#updatecall_json()
 
 if __name__ == '__main__':
     try:
