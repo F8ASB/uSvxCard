@@ -23,7 +23,7 @@ def main(argv):
     try:
         options, remainder = getopt.getopt(argv, '', ['help', 'version', 'dept=', 'call=', 'band='])
     except getopt.GetoptError:
-        l.usage()
+        usage()
         sys.exit(2)
     
     for opt, arg in options:
