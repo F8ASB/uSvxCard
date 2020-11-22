@@ -96,6 +96,7 @@ def updatecall(callsignSVX,callsignEL,callsignRRF):
 
     # instantiate
     config = ConfigParser()
+    config.optionxform = str
 
     # parse existing file
     config.read(svxlinkcfg)
