@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# F8ASB 2020
 
 import configparser, os
 import json
