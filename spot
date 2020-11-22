@@ -1,0 +1,189 @@
+#!/bin/bash
+# MENU DE SELECTION POUR uSvxCard  
+#
+#  F4ICR&F5SWB&F8ASB  21/11/2020
+#
+PATH_SCRIPT='/opt/uSvxCard/callconfig.py'
+
+entrercall()
+{
+call=$(whiptail --inputbox "Entrer votre indicatif ?" 8 39 FXXXX --title "INDICATIF" 3>&1 1>&2 2>&3)
+exitstatus=$?
+
+if [ $exitstatus = 0 ]; then
+    echo "Indicatif: " $call
+    entrerdept
+else
+    echo "Annulation"; 
+    spot
+fi
+}
+entrerdept()
+{
+dept=$(whiptail --inputbox "Entrer votre departement ?" 8 39 XX --title "DEPARTEMENT" 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+
+if [ $exitstatus = 0 ]; then
+    echo "Departement: " $dept
+    entrerband
+else
+    echo "Annulation"; break;
+    entrercall
+fi
+}
+
+entrerband()
+{
+band=$(whiptail --title "Type de HOTSPOT" --radiolist \
+"Choisissez le type de HOTSPOT?" 15 60 8 \
+"U" "UHF" ON \
+"V" "VHF" OFF \
+"H" "HOTSPOT" OFF \
+"T" "TRANSPONDEUR" OFF \
+"R" "RELAIS" OFF \
+"10M" "LINK SIMPLEX 10M" OFF \
+"T10M" "TRANSPONDEUR AVEC VOIE 10M" OFF \
+"S" "SPECIAL" OFF 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+if [ $exitstatus = 0 ]; then
+    arg1="--dept $dept"
+    arg2="--call $call"
+    arg3="--band $band"
+
+echo $arg1
+echo $arg2
+echo $arg3
+
+echo "python3 /opt/uSvxCard/callconfig.py $arg1 $arg2 $arg3"
+python3 $PATH_SCRIPT $arg1 $arg2 $arg3
+
+else
+    echo "Vous avez annulé";break;
+    entrerdept
+fi
+}
+
+
+while : ; do
+
+choix=$(whiptail --title "MicroSvxCard Menu 1.1"  --menu "                    >> Make your Choice: " 35 69 28 \
+1 "  Redémarrage Spotnik en mode Perroquet'95'" \
+2 "  Redémarrage Spotnik sur le RRF '96'" \
+3 "  Redémarrage Spotnik sur le FON Room '97'" \
+4 "  Redémarrage Spotnik sur le TEC Room '98'" \
+5 "  Redémarrage Spotnik sur le INT Room '99'" \
+6 "  Redémarrage Spotnik sur le BAV Room '100'" \
+7 "  Redémarrage Spotnik sur le LOC Room '101'" \
+8 "  Redémarrage Spotnik sur le EXP Room '102'" \
+9 "  Redémarrage Spotnik sur EchoLink '103'" \
+10 "  Redémarrage Spotnik sur le Régional '104'" \
+11 "  Affichage du Log Spotnik 'ctrl c' pour quitter" \
+12 "  Configuration du Wifi wpa_supplicant.conf" \
+13 "  Configuation de la carte son Alsamixer" \
+14 "  Editer Svxlink.cfg " \
+15 "  Editer Svxlink.el " \
+16 "  Editer le ModuleEchoLink.conf" \
+17 "  Editer l'aéroport pour la météo" \
+18 "  MC Midnight Commander" \
+19 "  Configuration mail pour la fonction Moniteur de propagation" \
+20 "  Configuration de la carte uDraCard " \
+21 "  Configuration du Spotnik (Indicatif, Département, Bande) " \
+22 "  Activation / Désactivation du Mode RAPTOR " \
+23 "  Configuration Dwagent " \
+24 "  Redémarrage '1000'"  3>&1 1>&2 2>&3)
+
+exitstatus=$?
+
+#on recupere ce choix
+#exitstatus=$?
+if [ $exitstatus = 0 ]; then
+    echo "votre choix :" $choix
+else
+    echo "Annulation du choix."; break;
+fi
+
+
+
+# case : action en fonction du choix
+
+case $choix in
+
+1)
+/etc/spotnik/restart.default ;;
+
+2)
+/etc/spotnik/restart.rrf ;;
+
+3)
+/etc/spotnik/restart.fon ;;
+
+4)
+/etc/spotnik/restart.tec ;;
+
+5)
+/etc/spotnik/restart.int ;;
+
+6)
+/etc/spotnik/restart.bav ;;
+
+7)
+/etc/spotnik/restart.loc ;;
+
+8)
+/etc/spotnik/restart.exp ;;
+
+9)
+/etc/spotnik/restart.el ;;
+
+10)
+/etc/spotnik/restart.reg ;;
+
+11)
+/etc/spotnik/view_svx ;;
+
+12)
+mcedit /etc/wpa_supplicant/wpa_supplicant.conf ;;
+
+13)
+alsamixer && alsactl store ;;
+
+14)
+mcedit /etc/spotnik/svxlink.cfg ;;
+
+15)
+mcedit /etc/spotnik/svxlink.el ;;
+
+16)
+mcedit /etc/spotnik/svxlink.d/ModuleEchoLink.conf ;;
+
+17)
+mcedit /etc/spotnik/svxlink.d/ModuleMetarInfo.conf ;;
+
+18)
+mc /etc/spotnik ;;
+
+19)
+fetchsetup ;;
+
+20)
+sh uDraCard_config.sh ;;
+
+21)
+entrercall ;;
+
+22)
+sh /opt/RRFRaptor/RRFRaptor.sh ;;
+
+
+23)
+sh /usr/share/dwagent/native/configure ;;
+
+24)
+reboot
+
+esac
+
+done
+exit 0
