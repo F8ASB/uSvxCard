@@ -103,15 +103,15 @@ def updatecall(callsignSVX,callsignEL,callsignRRF):
 
     # lecture et maj
     string_val = config.get('SimplexLogic', 'callsign')
-    config.set('SimplexLogic', 'callsign', callsignSVX)
+    config.set('SimplexLogic', 'CALLSIGN', callsignSVX)
 
     # lecture et maj
     string_val = config.get('LocationInfo', 'callsign')
-    config.set('LocationInfo', 'callsign', callsignEL)
+    config.set('LocationInfo', 'CALLSIGN', callsignEL)
 
     # lecture et maj
     string_val = config.get('ReflectorLogic', 'callsign')
-    config.set('ReflectorLogic', 'callsign', callsignRRF)
+    config.set('ReflectorLogic', 'CALLSIGN', callsignRRF)
 
     # Enregistrement
     with open(svxlinkcfg, 'w') as configfile:
