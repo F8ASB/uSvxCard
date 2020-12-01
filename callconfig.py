@@ -59,7 +59,7 @@ def Input_control(dept,call,band):
 #Mise en forme des calls
         upcallsignSVX=(call)
         upcallsignEL=( "EL-" +call)
-        upcallsignRRF=("(" +dept+ ")" +call+" "+band)
+        upcallsignRRF=("(" +dept+ ") " +call+" "+band)
 
 #Impression des calls
         print(call)
