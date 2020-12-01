@@ -115,7 +115,7 @@ def updatecall(callsignSVX,callsignEL,callsignRRF):
 
     # Enregistrement
     with open(svxlinkcfg, 'w') as configfile:
-        config.write(configfile)
+        config.write(configfile, space_around_delimiters=False)
 
 #Fonction ecriture dans config.json
 def updatecall_json():
