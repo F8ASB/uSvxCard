@@ -3,6 +3,8 @@
 #
 #  F4ICR&F5SWB&F8ASB  21/11/2020
 #
+HEIGHT=15
+WIDTH=40
 PATH_SCRIPT='/opt/uSvxCard/callconfig.py'
 
 entrercall()
@@ -66,9 +68,10 @@ fi
 }
 
 
+
 while : ; do
 
-choix=$(whiptail --title "MicroSvxCard Menu 1.1"  --menu "                    >> Make your Choice: " 35 69 28 \
+choix=$(whiptail --title "MicroSvxCard Menu 1.1 "  --menu "                    >> Faites votre choix " 40 70 31 \
 1 "  Redémarrage Spotnik en mode Perroquet'95'" \
 2 "  Redémarrage Spotnik sur le RRF '96'" \
 3 "  Redémarrage Spotnik sur le FON Room '97'" \
@@ -79,20 +82,26 @@ choix=$(whiptail --title "MicroSvxCard Menu 1.1"  --menu "                    >>
 8 "  Redémarrage Spotnik sur le EXP Room '102'" \
 9 "  Redémarrage Spotnik sur EchoLink '103'" \
 10 "  Redémarrage Spotnik sur le Régional '104'" \
-11 "  Affichage du Log Spotnik 'ctrl c' pour quitter" \
-12 "  Configuration du Wifi wpa_supplicant.conf" \
-13 "  Configuation de la carte son Alsamixer" \
-14 "  Editer Svxlink.cfg " \
-15 "  Editer Svxlink.el " \
-16 "  Editer le ModuleEchoLink.conf" \
-17 "  Editer l'aéroport pour la météo" \
-18 "  MC Midnight Commander" \
+11 "  Affichage du LOG Spotnik 'CTRL C' pour quitter" \
+12 "  Editer Svxlink.cfg (configuration pour tous les salons)" \
+13 "  Editer Svxlink.el  (configuration pour ECHOLINK) " \
+14 "  Editer le ModuleEchoLink.conf (configuration password)" \
+15 "  Editer l'aéroport pour la météo" \
+16 "  MC Midnight Commander" \
+17 "  Configuration du Wifi wpa_supplicant.conf" \
+18 "  Configuration de la carte son Alsamixer" \
 19 "  Configuration mail pour la fonction Moniteur de propagation" \
 20 "  Configuration de la carte uDraCard " \
 21 "  Configuration du Spotnik (Indicatif, Département, Bande) " \
-22 "  Activation / Désactivation du Mode RAPTOR " \
-23 "  Configuration Dwagent " \
-24 "  Redémarrage '1000'"  3>&1 1>&2 2>&3)
+22 "  Configuration Dwagent " \
+23 "  Activation / Désactivation du Mode RAPTOR " \
+24 "  Activation / Désactivation de l'écran NEXTION" \
+25 "  Activation / Désactivation du Timer salon " \
+26 "  Activation / Désactivation du DTMF " \
+27 "  Marche / Arrêt SvxControl et SvxLink" \
+28 "  Redémarrage complet du système "  \
+29 "  Arrêt complet du système " 3>&1 1>&2 2>&3)
+
 
 exitstatus=$?
 
@@ -144,46 +153,65 @@ case $choix in
 /etc/spotnik/view_svx ;;
 
 12)
-mcedit /etc/wpa_supplicant/wpa_supplicant.conf ;;
-
-13)
-alsamixer && alsactl store ;;
-
-14)
 mcedit /etc/spotnik/svxlink.cfg ;;
 
-15)
+13)
 mcedit /etc/spotnik/svxlink.el ;;
 
-16)
+14)
 mcedit /etc/spotnik/svxlink.d/ModuleEchoLink.conf ;;
 
-17)
+15)
 mcedit /etc/spotnik/svxlink.d/ModuleMetarInfo.conf ;;
 
-18)
+16)
 mc /etc/spotnik ;;
+
+17)
+mcedit /etc/wpa_supplicant/wpa_supplicant.conf ;;
+
+18)
+alsamixer && alsactl store ;;
 
 19)
 fetchsetup ;;
 
 20)
-sh uDraCard_config.sh ;;
+sh /opt/uDraCard/uDraCard_config.sh ;;
 
 21)
 entrercall ;;
 
 22)
-sh /opt/RRFRaptor/RRFRaptor.sh ;;
-
-
-23)
 sh /usr/share/dwagent/native/configure ;;
 
+23)
+sh /opt/RRFRaptor/RRFRaptor.sh ;;
+
 24)
-reboot
+sh /opt/uSvxCard/hmi.sh ;;
+
+25)
+echo "111#" > /tmp/dtmf_uhf
+echo "111#" > /tmp/dtmf_uhf ;;
+
+26)
+echo "999#" > /tmp/dtmf_uhf
+echo "999#" > /tmp/dtmf_uhf ;;
+
+27)
+sh /opt/uSvxCard/svxcontrol.sh ;;
+
+28)
+sudo reboot ;;
+
+29)
+sudo halt ;;
 
 esac
 
 done
 exit 0
+
+
+
