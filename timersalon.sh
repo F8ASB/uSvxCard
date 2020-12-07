@@ -5,7 +5,11 @@
 #
 
 # Set timeout in seconds
-rm /tmp/TIMER
+FILE=/tmp/TIMER
+if test -f "$FILE"; then
+    echo "$FILE exists."
+    rm /tmp/TIMER
+fi
 
 if [ $# -eq 0 ]
 then
