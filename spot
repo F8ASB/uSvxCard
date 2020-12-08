@@ -192,11 +192,11 @@ sh /opt/RRFRaptor/RRFRaptor.sh ;;
 sh /opt/uSvxCard/hmi.sh ;;
 
 25)
-echo "111#" > /tmp/dtmf_uhf
+echo "111#" > /tmp/dtmf_vhf
 echo "111#" > /tmp/dtmf_uhf ;;
 
 26)
-echo "999#" > /tmp/dtmf_uhf
+echo "999#" > /tmp/dtmf_vhf
 echo "999#" > /tmp/dtmf_uhf ;;
 
 27)
