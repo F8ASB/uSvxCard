@@ -154,7 +154,6 @@ def searchId(callsignId):
     fichier.close()
 
     if Id==" ":
-        print("PAS DE CALL")
         print('\x1b[7;37;41m'+freq+"->VOTRE INDICATIF NE FIGURE PAS DANS LA DATABASE DMRIds.dat "+'\x1b[0m')
         sys.exit()
 
