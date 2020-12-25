@@ -153,6 +153,11 @@ def searchId(callsignId):
             Id = Id[0]
     fichier.close()
 
+    if Id==" ":
+        print("PAS DE CALL")
+        print('\x1b[7;37;41m'+freq+"->VOTRE INDICATIF NE FIGURE PAS DANS LA DATABASE DMRIds.dat "+'\x1b[0m')
+        sys.exit()
+
 #Mise a jour Id dans les fichiers de config numeriques
 
 def updateIdMMDMV_Bridge(callsign,Id):
