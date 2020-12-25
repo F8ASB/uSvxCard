@@ -11,6 +11,9 @@ Usage: callconfig.py [options ...]')
     --dept       nombre      Entrer le numero de departement ex:88
     --call       texte       Entrer votre indicatif ex:F1ABC
     --band       nombre      Entrer la type acces (H,V,U,10M,R,T,T10M,S)
+## callconfignum.py
+
+Même mode de fonctinnement que callconfig.py avec les fichiers numérique en plus
     
 ## shutdown.py
 
