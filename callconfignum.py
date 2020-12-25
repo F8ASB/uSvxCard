@@ -154,7 +154,7 @@ def searchId(callsignId):
     fichier.close()
 
     if Id==" ":
-        print('\x1b[7;37;41m'+freq+"->VOTRE INDICATIF NE FIGURE PAS DANS LA DATABASE DMRIds.dat "+'\x1b[0m')
+        print('\x1b[7;37;41m'+"->VOTRE INDICATIF NE FIGURE PAS DANS LA DATABASE DMRIds.dat "+'\x1b[0m')
         sys.exit()
 
 #Mise a jour Id dans les fichiers de config numeriques
