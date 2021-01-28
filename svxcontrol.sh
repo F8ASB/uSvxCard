@@ -1,3 +1,4 @@
+#!/bin/bash
 test1=$(grep -c "\#\* \* \* \* \* root pgrep svxlink" /etc/crontab)
  echo "$test1"
 
