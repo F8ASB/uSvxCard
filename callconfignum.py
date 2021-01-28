@@ -205,6 +205,9 @@ def updateGateway(callsign,fileini):
 
     string_val = config.get('General', 'Callsign')
     config.set('General', 'Callsign', callsign )
+    
+    string_val = config.get('General', 'Id')
+    config.set('General', 'Id', Id)
 
     with open(fileini, 'w') as configfile:
         config.write(configfile, space_around_delimiters=False)
