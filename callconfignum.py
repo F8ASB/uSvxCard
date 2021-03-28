@@ -187,12 +187,17 @@ def searchId(callsignId):
     fichier.close()
 
     if Id==" ":
-        print('\x1b[7;37;41m'+"->VOTRE INDICATIF NE FIGURE PAS DANS LA DATABASE DMRIds.dat "+'\x1b[0m')
-        os.system('sh /usr/local/sbin/DMRIDUpdate.sh')
-        sys.exit()
+            print('\x1b[7;37;41m'+"->VOTRE INDICATIF NE FIGURE PAS DANS LA DATABASE DMRIds.dat "+'\x1b[0m')
+            os.system('sh /usr/local/sbin/DMRIDUpdate.sh')
+
+            if test==0:
+                searchId(callsignId)
+                test=1
+            else:
+                sys.exit()
+
     else:
         controlID(Id,analogbridgeini)
-
 
 #Mise a jour Id dans les fichiers de config numeriques
 
@@ -277,7 +282,7 @@ def controlID(Nid,fileini):
 
     config.read(fileini)
 
-    string_val = config.get('General', 'Id')
+    string_val = config.get('AMBE_AUDIO', 'gatewayDmrId')
     print(string_val)
 
 
