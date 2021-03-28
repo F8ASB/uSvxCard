@@ -10,14 +10,14 @@ import getopt
 from configparser import ConfigParser
 
 svxlinkcfg='/etc/spotnik/svxlink.cfg'
+svxlinkel='/etc/spotnik/svxlink.el'
+moduleecholinkconf='/etc/spotnik/svxlink.d/ModuleEchoLink.conf'
 Json="/etc/spotnik/config.json"
 fileId= '/var/lib/mmdvm/DMRIds.dat'
-analogbridgeini= "/opt/Analog_Bridge/Analog_Bridge.ini"  
+analogbridgeini= "/opt/Analog_Bridge/Analog_Bridge.ini"
 mmdmvbridgeini="/opt/MMDVM_Bridge/MMDVM_Bridge.ini"
-NXDNGatewayini= "/opt/NXDNGateway/NXDNGateway.ini"
-P25Gatewayini="/opt/P25Gateway/P25Gateway.ini"
 YSFGatewayini="/opt/YSFGateway/YSFGateway.ini"
-ircddbgateway="/etc/ircddbgateway"
+mmdvmbridgedmr="/opt/MMDVM_Bridge/MMDVM_Bridge.dmr"
 
 
 version="1.00"
@@ -79,16 +79,17 @@ def Input_control(dept,call,band):
         print(call)
         print( call + "-EL")
         print("(" +dept+ ") " +call+" "+band)
+
 #MAJ dans les fichiers de config
         updatecall(upcallsignSVX,upcallsignEL,upcallsignRRF)
+        updatecallel(upcallsignSVX,upcallsignEL)
+        updatecallelconf(upcallsignSVX)
         updatecall_json()
         searchId(call)
         updateIdMMDMV_Bridge(call,Id)
         updateIdANALOG_Bridge(call,Id)
-        updateGateway(call,NXDNGatewayini)
-        updateGateway(call,P25Gatewayini)
         updateGateway(call,YSFGatewayini)
-        updateIrcddb(call)      
+        updateMMDVM(call,mmdvmbridgedmr)
 
 def usage():
     print('Usage: callconfig.py [options ...]')
@@ -125,6 +126,38 @@ def updatecall(callsignSVX,callsignEL,callsignRRF):
     with open(svxlinkcfg, 'w') as configfile:
         config.write(configfile, space_around_delimiters=False)
 
+#Fonction ecriture dans svxlink.el
+def updatecallel(callsignSVX,callsignEL):
+
+    config = ConfigParser()
+    config.optionxform = str
+
+    config.read(svxlinkel)
+
+    string_val = config.get('SimplexLogic', 'CALLSIGN')
+    config.set('SimplexLogic', 'CALLSIGN', callsignSVX)
+
+    string_val = config.get('LocationInfo', 'CALLSIGN')
+    config.set('LocationInfo', 'CALLSIGN', callsignEL)
+
+    with open(svxlinkel, 'w') as configfile:
+        config.write(configfile, space_around_delimiters=False)
+
+#Fonction ecriture dans moduleecholinkconf
+def updatecallelconf(callsignSVX):
+
+    config = ConfigParser()
+    config.optionxform = str
+
+    config.read(moduleecholinkconf)
+
+    string_val = config.get('ModuleEchoLink', 'CALLSIGN')
+    config.set('ModuleEchoLink', 'CALLSIGN', callsignSVX)
+
+    with open(moduleecholinkconf, 'w') as configfile:
+        config.write(configfile, space_around_delimiters=False)
+
+
 #Fonction ecriture dans config.json
 def updatecall_json():
 
@@ -149,13 +182,17 @@ def searchId(callsignId):
     for ligne in fichier:
         if callsignId in ligne:
             Id = ((ligne).split())
-            print(Id[0])
+           # print(Id[0]+'....OK')
             Id = Id[0]
     fichier.close()
 
     if Id==" ":
         print('\x1b[7;37;41m'+"->VOTRE INDICATIF NE FIGURE PAS DANS LA DATABASE DMRIds.dat "+'\x1b[0m')
         sys.exit()
+    else:
+        print(Id+'....OK')
+        controlID(Id,analogbridgeini)
+
 
 #Mise a jour Id dans les fichiers de config numeriques
 
@@ -194,7 +231,6 @@ def updateIdANALOG_Bridge(callsign,Id):
         config.write(configfile, space_around_delimiters=False)
         print("Ecriture ANALOG_Bridge.ini ...")
 
-    
 #Mise a jour des fichiers gateway
 def updateGateway(callsign,fileini):
         
@@ -213,27 +249,38 @@ def updateGateway(callsign,fileini):
         config.write(configfile, space_around_delimiters=False)
         print("Ecriture "+fileini+" ...")    
 
-#Mise à jour Ircddb
-def updateIrcddb(callsign):
-    
+#Mise a jour du fichier MMDVM_Bridge.dmr
+def updateMMDVM(callsign,fileini):
+
     config = ConfigParser()
     config.optionxform = str
 
-    config.read(ircddbgateway)
+    config.read(fileini)
 
-    string_val = config.get('General', 'gatewayCallsign')
-    config.set('General', 'gatewayCallsign', callsign )
+    string_val = config.get('General', 'Callsign')
+    config.set('General', 'Callsign', callsign )
 
-    string_val = config.get('General', 'ircddbUsername')
-    config.set('General', 'ircddbUsername', callsign )
+    string_val = config.get('General', 'Id')
+    config.set('General', 'Id', Id)
 
-    string_val = config.get('General', 'dplusLogin')
-    config.set('General', 'dplusLogin', callsign )
-     
-    with open(ircddbgateway, 'w') as configfile:
+    with open(fileini, 'w') as configfile:
         config.write(configfile, space_around_delimiters=False)
-        print("Ecriture IrcdDB ...")    
+        print("Ecriture "+fileini+" ...")
 
+def controlID(id,fileini):
+    
+#    print(id)
+#    print(fileini)
+
+    config = ConfigParser()
+    config.optionxform = str
+
+    config.read(fileini)
+
+    string_val = config.get('AMBE_AUDIO', 'gatewayDmrId')
+    print(string_val+' deja present...fin de la procedure')
+    if string_val==id:
+        sys.exit()
 
 
 if __name__ == '__main__':
@@ -241,3 +288,4 @@ if __name__ == '__main__':
         main(sys.argv[1:])
     except KeyboardInterrupt:
         pass
+
