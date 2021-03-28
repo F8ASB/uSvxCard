@@ -177,6 +177,7 @@ def updatecall_json():
 #rechercher Id selon call
 def searchId(callsignId):
     global Id
+    global test
     
     fichier = open(fileId,"r")
     print("Recherche de l'Id ...")
@@ -190,10 +191,12 @@ def searchId(callsignId):
     if Id==" ":
             print('\x1b[7;37;41m'+"->VOTRE INDICATIF NE FIGURE PAS DANS LA DATABASE DMRIds.dat "+'\x1b[0m')
             os.system('sh /usr/local/sbin/DMRIDUpdate.sh')
-
+            
             if test==0:
-                searchId(callsignId)
                 test=1
+                searchId(callsignId)
+                
+
             else:
                 sys.exit()
 
