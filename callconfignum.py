@@ -276,9 +276,9 @@ def updateMMDVM(callsign,fileini):
         config.write(configfile, space_around_delimiters=False)
         print("Ecriture "+fileini+" ...")
 
-def controlID(Nid,fileini):
+def controlID(id,fileini):
     
-    print(Nid)
+    print(id)
     print(fileini)
 
     config = ConfigParser()
@@ -287,8 +287,11 @@ def controlID(Nid,fileini):
     config.read(fileini)
 
     string_val = config.get('AMBE_AUDIO', 'gatewayDmrId')
-    print(string_val)
-
+    
+    if string_val==id:
+        print(string_val+' deja present...fin de la procedure')
+        sys.exit()
+     
 
 
 if __name__ == '__main__':
