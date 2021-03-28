@@ -182,15 +182,15 @@ def searchId(callsignId):
     for ligne in fichier:
         if callsignId in ligne:
             Id = ((ligne).split())
-           # print(Id[0]+'....OK')
+            print(Id[0])
             Id = Id[0]
     fichier.close()
 
     if Id==" ":
         print('\x1b[7;37;41m'+"->VOTRE INDICATIF NE FIGURE PAS DANS LA DATABASE DMRIds.dat "+'\x1b[0m')
+        os.system('sh /usr/local/sbin/DMRIDUpdate.sh')
         sys.exit()
     else:
-        print(Id+'....OK')
         controlID(Id,analogbridgeini)
 
 
@@ -267,20 +267,19 @@ def updateMMDVM(callsign,fileini):
         config.write(configfile, space_around_delimiters=False)
         print("Ecriture "+fileini+" ...")
 
-def controlID(id,fileini):
+def controlID(Nid,fileini):
     
-#    print(id)
-#    print(fileini)
+    print(Nid)
+    print(fileini)
 
     config = ConfigParser()
     config.optionxform = str
 
     config.read(fileini)
 
-    string_val = config.get('AMBE_AUDIO', 'gatewayDmrId')
-    print(string_val+' deja present...fin de la procedure')
-    if string_val==id:
-        sys.exit()
+    string_val = config.get('General', 'Id')
+    print(string_val)
+
 
 
 if __name__ == '__main__':
@@ -288,4 +287,3 @@ if __name__ == '__main__':
         main(sys.argv[1:])
     except KeyboardInterrupt:
         pass
-
