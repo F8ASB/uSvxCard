@@ -26,7 +26,7 @@ dept= " "
 band = " "
 usage= " "
 Id = " "
-
+test=0
 
 # lancement avec argument
     
@@ -177,6 +177,7 @@ def updatecall_json():
 #rechercher Id selon call
 def searchId(callsignId):
     global Id
+    
     fichier = open(fileId,"r")
     print("Recherche de l'Id ...")
     for ligne in fichier:
