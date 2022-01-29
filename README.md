@@ -13,7 +13,7 @@ Usage: callconfig.py [options ...]')
     --band       nombre      Entrer la type acces (H,V,U,10M,R,T,T10M,S)
 ## callconfignum.py
 
-Même mode de fonctinnement que callconfig.py avec les fichiers numérique en plus
+Même mode de fonctionnement que callconfig.py avec les fichiers numérique en plus
     
 ## shutdown.py
 
