@@ -82,9 +82,5 @@ activer_demarrage
 
 esac
 
-
-
-
-
 done
 exit 0
