@@ -25,7 +25,7 @@ fi
 
 choix_port()
 {
-port=$(whiptail --inputbox "Entrez le Port: ?" 8 39 4500 --title "Frequence TX" 3>&1 1>&2 2>&3)
+port=$(whiptail --inputbox "Entrez le Port: ?" 8 39 5300 --title "Frequence TX" 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 
