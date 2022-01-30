@@ -118,7 +118,7 @@ fi
 
 choix_port_salon()
 {
-port2=$(whiptail --inputbox "Entrez le Port: ?" 8 39 4500 --title "Port du salon" 3>&1 1>&2 2>&3)
+port2=$(whiptail --inputbox "Entrez le Port: ?" 8 39 5300 --title "Port du salon" 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 
