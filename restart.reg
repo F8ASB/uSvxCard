@@ -1,0 +1,53 @@
+#!/bin/bash
+# F4ICR&F5SWB&F8ASB 2020
+# uSvxDracard forked spotnik V4
+# Ce script demarre le salon REGIONAL
+
+# On deconnecte les TG avant de quitter le bridge connecte 
+/opt/Analog_Bridge/dvswitch.sh mode DMR
+/opt/Analog_Bridge/dvswitch.sh ambemode DMR
+/opt/Analog_Bridge/dvswitch.sh slot 2
+/opt/Analog_Bridge/dvswitch.sh tune 400
+
+# On stoppe mmdvm_bridge.service (MMDVM_Bridge.save)
+sudo systemctl stop mmdvm_bridge.service
+
+# On stoppe svxbridge.py & svxlink & le timer salon
+pkill -f svxbridge.py
+if pgrep -x svxlink >/dev/null
+then
+    pkill -TERM svxlink
+    pkill -f timersalon
+fi
+
+# On ecrit le nom du salon dans network
+echo "reg" > /etc/spotnik/network
+> /etc/spotnik/nummode
+> /etc/spotnik/numroom
+
+# on cree un lien sympbolique pour lire l'annonce wav
+rm /usr/share/svxlink/sounds/fr_FR/PropagationMonitor/name.wav
+ln -s /usr/share/svxlink/sounds/fr_FR/RRF/Sreg.wav /usr/share/svxlink/sounds/fr_FR/PropagationMonitor/name.wav
+
+
+# On efface le log
+> /tmp/svxlink.log
+
+# On copie svxlink.cfg vers svxlink.reg
+rm -f /etc/spotnik/svxlink.reg
+cat /etc/spotnik/svxlink.cfg >/etc/spotnik/svxlink.reg
+
+# On copie le host dans svxlink.reg
+echo "HOST=XXXXXXXXXXXXXX" >>/etc/spotnik/svxlink.reg
+echo "AUTH_KEY=XXXXX" >>/etc/spotnik/svxlink.reg
+echo "PORT=5300" >>/etc/spotnik/svxlink.reg
+
+
+# On lance svxlink.reg
+svxlink --daemon --logfile=/tmp/svxlink.log --pidfile=/var/run/svxlink.pid --runasuser=root --config=/etc/spotnik/svxlink.reg
+sleep 2
+
+# on annonce l'activation du salon REGIONAL
+echo "10#" > /tmp/dtmf_uhf
+echo "10#" > /tmp/dtmf_vhf
+
