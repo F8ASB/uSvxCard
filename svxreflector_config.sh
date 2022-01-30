@@ -1,3 +1,5 @@
+#!/bin/sh
+
 ############################
 #Configuration svxreflector#
 #        F8ASB 2022        #
@@ -10,7 +12,8 @@ while : ; do
 choix=$(whiptail --title "Choisir votre action" --radiolist \
 "Que voulez vous faire ?" 15 50 4 \
 "1" "CONFIGURATION de SvxReflector " ON \
-"2" "ACTIVER SvxReflector au demarrage " OFF 3>&1 1>&2 2>&3)
+"2" "CONFIGURATION de Salon régional " OFF \
+"3" "ACTIVER SvxReflector au demarrage " OFF 3>&1 1>&2 2>&3)
 
 exitstatus=$?
 
@@ -63,12 +66,87 @@ sed -i 's/AUTH_KEY=XXXXX/AUTH_KEY='$password'/g' /etc/spotnik/svxreflector.conf 
 
 activer_demarrage()
 {
-#ajout de la commande au demarrage
+
+ip_adresse=$(curl ifconfig.me);
+
+ajout de la commande au demarrage
 sed -i '/make start/a \sleep 2' /etc/rc.local
 sed -i '/make start/a \svxreflector --config=/etc/spotnik/svxreflector.conf --daemon --logfile=/tmp/svxreflector.log' /etc/rc.local
 sed -i '/make start/a \#DEMARRAGE SVXREFLECTOR' /etc/rc.local
 sed -i '/make start/a \ ' /etc/rc.local
+
+whiptail --title "INFORMATION SERVEUR REGIONAL:" --msgbox "Informations à transmettre aux utilisateurs:
+
+-Adresse IP:$ip_adresse 
+-Port:$port
+-Mot de passe:$password
+
+
+Un redemarrage sera necessaire pour la prise en compte de la configuration
+
+
+Cliquer sur Ok pour continuer..." 20 60
 }
+
+choix_adresse_salon()
+{
+host=$(whiptail --inputbox "Entrez l'adresse du serveur: ?" 8 39 xxxxxxxxxx --title "Adresse du serveur:" 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+
+if [ $exitstatus = 0 ]; then
+    echo "Port: " $host
+    choix_auth_salon
+else
+    echo "Annulation"; break;
+fi
+}
+
+choix_auth_salon()
+{
+password2=$(whiptail --inputbox "Entrez le mot de passe du serveur: ?" 8 39 xxxxxxx --title "Mot de passe du salon:" 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+
+if [ $exitstatus = 0 ]; then
+    echo "Port: " $password2
+    choix_port_salon
+else
+    echo "Annulation"; break;
+fi
+}
+
+choix_port_salon()
+{
+port2=$(whiptail --inputbox "Entrez le Port: ?" 8 39 4500 --title "Port du salon" 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+
+if [ $exitstatus = 0 ]; then
+    echo "Port: " $port2
+    ecrire_config_salon
+else
+    echo "Annulation"; break;
+fi
+}
+
+ecrire_config_salon()
+{
+
+#telechargement du fichier restart.reg
+wget -N https://raw.githubusercontent.com/F8ASB/uSvxCard/main/restart.reg -P /etc/spotnik/
+sleep 2
+#remplacement du fichier restar.reg par les valeurs données
+sed -i 's/HOST=XXXXXXXXXXXXXX/HOST='$host'/g' /etc/spotnik/restart.reg 
+sed -i 's/AUTH_KEY=XXXXX/AUTH_KEY='$password2'/g' /etc/spotnik/restart.reg 
+sed -i 's/PORT=5300/PORT='$port2'/g' /etc/spotnik/restart.reg 
+
+whiptail --title "INFORMATION SALON REGIONAL:" --msgbox "Votre salon régional est maintenant configuré
+
+
+Cliquer sur Ok pour continuer..." 10 60
+}
+
 
 case $choix in
 
@@ -77,6 +155,10 @@ choix_port
 ;;
 
 2) 
+choix_adresse_salon
+;;
+
+3) 
 activer_demarrage
 ;;
 
@@ -84,3 +166,4 @@ esac
 
 done
 exit 0
+
