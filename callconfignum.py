@@ -18,7 +18,8 @@ analogbridgeini= "/opt/Analog_Bridge/Analog_Bridge.ini"
 mmdmvbridgeini="/opt/MMDVM_Bridge/MMDVM_Bridge.ini"
 YSFGatewayini="/opt/YSFGateway/YSFGateway.ini"
 mmdvmbridgedmr="/opt/MMDVM_Bridge/MMDVM_Bridge.dmr"
-
+mmdvmbridgeipsc2="/opt/MMDVM_Bridge/MMDVM_Bridge.ipsc2"
+mmdvmbridgebm="/opt/MMDVM_Bridge/MMDVM_Bridge.bm"
 
 version="1.00"
 call = " "
@@ -90,6 +91,8 @@ def Input_control(dept,call,band):
         updateIdANALOG_Bridge(call,Id)
         updateGateway(call,YSFGatewayini)
         updateMMDVM(call,mmdvmbridgedmr)
+        updateMMDVM(call,mmdvmbridgeipsc2)
+        updateMMDVM(call,mmdvmbridgebm)
 
 def usage():
     print('Usage: callconfig.py [options ...]')
@@ -275,7 +278,7 @@ def updateMMDVM(callsign,fileini):
     with open(fileini, 'w') as configfile:
         config.write(configfile, space_around_delimiters=False)
         print("Ecriture "+fileini+" ...")
-
+        
 def controlID(id,fileini):
     
     print(id)
