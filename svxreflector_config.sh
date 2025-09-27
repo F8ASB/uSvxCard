@@ -69,11 +69,27 @@ activer_demarrage()
 
 ip_adresse=$(curl ifconfig.me);
 
-ajout de la commande au demarrage
-sed -i '/make start/a \sleep 2' /etc/rc.local
-sed -i '/make start/a \svxreflector --config=/etc/spotnik/svxreflector.conf --daemon --logfile=/tmp/svxreflector.log' /etc/rc.local
-sed -i '/make start/a \#DEMARRAGE SVXREFLECTOR' /etc/rc.local
-sed -i '/make start/a \ ' /etc/rc.local
+# Vérifie que le fichier existe
+if [ ! -f /etc/rc.local ]; then
+    echo "Le fichier /etc/rc.local n'existe pas. Abandon."
+    exit 1
+fi
+
+# Vérifie que la ligne cible est présente
+if ! grep -q "#echo 1 > /sys/class/gpio/gpio23/active_low" /etc/rc.local; then
+    echo "La ligne cible est introuvable dans /etc/rc.local. Abandon."
+    exit 1
+fi
+
+# Ajoute les lignes dans le bon ordre
+sudo sed -i '/#echo 1 > \/sys\/class\/gpio\/gpio23\/active_low/a sleep 2' /etc/rc.local
+sudo sed -i '/#echo 1 > \/sys\/class\/gpio\/gpio23\/active_low/a svxreflector --config=/etc/spotnik/svxreflector.conf --daemon --logfile=/tmp/svxreflector.log' /etc/rc.local
+sudo sed -i '/#echo 1 > \/sys\/class\/gpio\/gpio23\/active_low/a #DEMARRAGE SVXREFLECTOR' /etc/rc.local
+
+# Ajoute une ligne vide en utilisant une astuce : insérer une ligne contenant juste un espace
+sudo sed -i '/#echo 1 > \/sys\/class\/gpio\/gpio23\/active_low/a \ ' /etc/rc.local
+
+echo "Bloc SVXReflector ajouté avec une ligne vide avant le commentaire."
 
 whiptail --title "INFORMATION SERVEUR REGIONAL:" --msgbox "Informations à transmettre aux utilisateurs:
 
